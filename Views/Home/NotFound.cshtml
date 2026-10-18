@@ -1,0 +1,21 @@
+@{
+    Layout = null;
+    ViewData["Title"] = "Không tìm thấy trang";
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>404 — WeConnect</title>
+    <link rel="stylesheet" href="~/css/app.css" asp-append-version="true" />
+</head>
+<body class="auth-body">
+    <div class="error-page">
+        <div class="error-code">404</div>
+        <h1>Trang không tồn tại</h1>
+        <p style="color:var(--text-2);margin:8px 0 24px;">Đường dẫn bạn truy cập không có hoặc đã bị di chuyển.</p>
+        <a class="btn btn-primary" asp-controller="Work" asp-action="Index">Về Công việc</a>
+    </div>
+</body>
+</html>

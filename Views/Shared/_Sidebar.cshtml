@@ -1,0 +1,52 @@
+@{
+    // Mục đang mở để highlight trên sidebar
+    var active = ViewData["ActiveMenu"] as string ?? "";
+}
+
+<aside class="sidebar">
+    <div class="sidebar-logo">
+        <a class="logo-mark" asp-controller="Work" asp-action="Index" title="Về Công việc">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
+                <circle cx="12" cy="5" r="2.5" />
+                <circle cx="5" cy="18" r="2.5" />
+                <circle cx="19" cy="18" r="2.5" />
+                <line x1="12" y1="7.5" x2="5" y2="15.5" />
+                <line x1="12" y1="7.5" x2="19" y2="15.5" />
+                <line x1="7.5" y1="18" x2="16.5" y2="18" />
+            </svg>
+        </a>
+        <a class="logo-text" asp-controller="Work" asp-action="Index">WeConnect</a>
+        <button class="collapse-btn" type="button" data-toggle-sidebar title="Thu gọn">«</button>
+    </div>
+
+    <div class="sidebar-scroll">
+        @* Ô tìm kiếm (chỉ giao diện) *@
+        <div class="sidebar-search">
+            <span class="search-dot"></span>
+            <input type="text" placeholder="Tìm kiếm" />
+        </div>
+
+        <div class="sidebar-group-label">Không gian chính</div>
+        <a class="sidebar-item @(active == "work" ? "active" : "")" asp-controller="Work" asp-action="Index">
+            <span class="ico">▣</span><span class="txt">Công việc</span>
+        </a>
+        <a class="sidebar-item @(active == "messages" ? "active" : "")" asp-controller="Messages" asp-action="Index">
+            <span class="ico">👥</span><span class="txt">Messages</span>
+            <span class="sidebar-item-badge">12</span>
+        </a>
+        <a class="sidebar-item @(active == "admin" ? "active" : "")" asp-controller="Admin" asp-action="Index">
+            <span class="ico">🛡</span><span class="txt">Quản trị &amp; Phân quyền</span>
+        </a>
+
+        <div class="sidebar-group-label" style="margin-top:12px;">Dự án</div>
+        <a class="sidebar-item" asp-controller="Work" asp-action="Board" asp-route-projectName="WCN-console">
+            <span class="ico project-folder">📁</span><span class="txt">WCN- console</span><span class="more">⋮</span>
+        </a>
+        <a class="sidebar-item" asp-controller="Work" asp-action="Board" asp-route-projectName="WCN-mobile">
+            <span class="ico project-folder purple">📁</span><span class="txt">WCN- mobile</span><span class="more">⋮</span>
+        </a>
+        <a class="sidebar-item" asp-controller="Work" asp-action="Board" asp-route-projectName="Update cho WCN">
+            <span class="ico project-folder green">📁</span><span class="txt">Update cho WCN</span><span class="more">⋮</span>
+        </a>
+    </div>
+</aside>

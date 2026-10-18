@@ -1,0 +1,45 @@
+@model List<ProjectItem>
+@{
+    ViewData["Title"] = "Công việc";
+    ViewData["ActiveMenu"] = "work";
+    ViewData["Breadcrumb"] = "Công việc";
+}
+
+<div class="panel">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);">
+        <h1 style="font-size:18px;">Công việc</h1>
+        <button class="btn btn-outline" type="button" data-open-modal="create-project-modal">+ Create project</button>
+    </div>
+
+    <table class="list-table">
+        <thead>
+            <tr>
+                <th>Tiêu đề</th>
+                <th>Tiến độ</th>
+                <th>Due date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in Model)
+            {
+                <tr class="clickable" onclick="window.location='@Url.Action("Board", "Work", new { projectName = p.Key })'">
+                    <td>
+                        <div class="row-title">
+                            <span class="board-ico">▦</span>
+                            <a asp-controller="Work" asp-action="Board" asp-route-projectName="@p.Key">@p.Title</a>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="progress">
+                            <div class="progress-track"><div class="progress-fill" style="width:@(p.Progress)%"></div></div>
+                            <span class="progress-val">@p.Progress%</span>
+                        </div>
+                    </td>
+                    <td style="color:var(--text-2);">@p.DueDate</td>
+                    <td><span class="pill">@p.Status</span></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

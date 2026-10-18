@@ -1,0 +1,49 @@
+@model BoardViewModel
+@{
+    ViewData["Title"] = Model.ProjectName;
+    ViewData["ActiveMenu"] = "work";
+    ViewData["Breadcrumb"] = Model.ProjectName;
+}
+
+@* Thanh lọc (chỉ giao diện) *@
+<div class="kanban-toolbar">
+    <button class="filter-btn" type="button"><span class="funnel">▽</span>Assignee</button>
+    <button class="filter-btn" type="button"><span class="funnel">▽</span>Creator</button>
+    <button class="filter-btn" type="button"><span class="funnel">▽</span>Priority</button>
+    <button class="filter-btn" type="button"><span class="funnel">▽</span>Due date</button>
+    <button class="filter-btn bordered" type="button">⇅ Sort</button>
+    <div class="search-ctrl">
+        <span>🔍</span><input type="text" placeholder="Tìm kiếm" /><span class="kbd">Ctrl+F</span>
+    </div>
+</div>
+
+@{ ViewData["BoardProjectName"] = Model.ProjectName; }
+
+@* Bảng Kanban *@
+<div class="kanban">
+    @foreach (var col in Model.Columns)
+    {
+        <div class="kanban-column">
+            <div class="column-header">
+                <span class="st">@col.Icon</span>
+                <span>@col.Name</span>
+                <span class="count">@col.TotalCount</span>
+                <div class="column-actions">
+                    <button type="button" title="Tùy chọn cột">⋮</button>
+                    <button type="button" title="Thêm task" data-open-modal="task-modal">+</button>
+                </div>
+            </div>
+            <div class="column-body">
+                @foreach (var t in col.Tasks)
+                {
+                    <partial name="_TaskCard" model="t" />
+                }
+                @if (col.Tasks.Count == 0)
+                {
+                    <button class="btn btn-ghost btn-sm" type="button" data-open-modal="task-modal" style="align-self:flex-start;">+ Add task</button>
+                }
+            </div>
+        </div>
+    }
+    <button class="column-add" type="button">+ Add column</button>
+</div>

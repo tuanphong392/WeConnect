@@ -1,0 +1,46 @@
+@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = "Đăng ký";
+}
+
+<div class="auth-card">
+    <div class="auth-logo">
+        <span class="logo-mark" style="width:34px;height:34px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
+                <circle cx="12" cy="5" r="2.5" />
+                <circle cx="5" cy="18" r="2.5" />
+                <circle cx="19" cy="18" r="2.5" />
+                <line x1="12" y1="7.5" x2="5" y2="15.5" />
+                <line x1="12" y1="7.5" x2="19" y2="15.5" />
+                <line x1="7.5" y1="18" x2="16.5" y2="18" />
+            </svg>
+        </span>
+        <span class="logo-text">WeConnect</span>
+    </div>
+
+    <h1 class="auth-title">Create account</h1>
+    <div class="auth-sub">Get started with your workspace</div>
+
+    <form asp-controller="Auth" asp-action="Register" method="post">
+        <div class="field">
+            <label for="reg-name">Full Name</label>
+            <input class="input" id="reg-name" name="fullName" type="text" placeholder="John Doe" />
+        </div>
+        <div class="field">
+            <label for="reg-email">Email</label>
+            <input class="input" id="reg-email" name="email" type="email" placeholder="me@example.com" />
+        </div>
+        <div class="field">
+            <label for="reg-pass">Password</label>
+            <div class="input-wrap">
+                <input class="input" id="reg-pass" name="password" type="password" placeholder="••••••••" />
+                <button class="eye-btn" type="button" data-toggle-pass="reg-pass">👁</button>
+            </div>
+        </div>
+        <button class="btn btn-primary btn-block" type="submit">Create Account</button>
+    </form>
+
+    <div class="auth-foot">
+        Already have an account? <a asp-controller="Auth" asp-action="Login">Sign in</a>
+    </div>
+</div>

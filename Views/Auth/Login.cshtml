@@ -1,0 +1,64 @@
+@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = "Đăng nhập";
+}
+
+<div class="auth-card">
+    <div class="auth-logo">
+        <span class="logo-mark" style="width:34px;height:34px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
+                <circle cx="12" cy="5" r="2.5" />
+                <circle cx="5" cy="18" r="2.5" />
+                <circle cx="19" cy="18" r="2.5" />
+                <line x1="12" y1="7.5" x2="5" y2="15.5" />
+                <line x1="12" y1="7.5" x2="19" y2="15.5" />
+                <line x1="7.5" y1="18" x2="16.5" y2="18" />
+            </svg>
+        </span>
+        <span class="logo-text">WeConnect</span>
+    </div>
+
+    <h1 class="auth-title">Sign in to WeConnect</h1>
+    <div class="auth-sub">Sign in to access your team workspace.</div>
+
+    @* Nhóm tab phân đoạn: Password / Email code *@
+    <div data-tabs>
+        <div class="tabs">
+            <div class="tab active" data-tab="password">Password</div>
+            <div class="tab" data-tab="emailcode">Email code</div>
+        </div>
+    </div>
+
+    <form asp-controller="Auth" asp-action="Login" method="post">
+        @* Panel đăng nhập bằng mật khẩu *@
+        <div data-tab-panel="password">
+            <div class="field">
+                <label for="login-email">Work email</label>
+                <input class="input" id="login-email" name="email" type="email" placeholder="name@weconnect.vn" />
+            </div>
+            <div class="field">
+                <label for="login-pass">Password</label>
+                <div class="input-wrap">
+                    <input class="input" id="login-pass" name="password" type="password" placeholder="••••••••" />
+                    <button class="eye-btn" type="button" data-toggle-pass="login-pass">👁</button>
+                </div>
+            </div>
+            <button class="btn btn-primary btn-block" type="submit">Continue</button>
+        </div>
+
+        @* Panel đăng nhập bằng mã email (chỉ đổi giao diện) *@
+        <div data-tab-panel="emailcode" style="display:none;">
+            <div class="field">
+                <label for="login-email2">Work email</label>
+                <input class="input" id="login-email2" name="email" type="email" placeholder="name@weconnect.vn" />
+            </div>
+            <button class="btn btn-outline btn-block" type="button">Verification Code</button>
+        </div>
+    </form>
+
+    <a class="forgot-link" asp-controller="Auth" asp-action="ForgotPassword">Forgot password?</a>
+
+    <div class="auth-foot">
+        Chưa có tài khoản? <a asp-controller="Auth" asp-action="Register">Tạo tài khoản</a>
+    </div>
+</div>

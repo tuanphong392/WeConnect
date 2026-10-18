@@ -1,0 +1,35 @@
+@* Card task trên bảng Kanban (B5). @model TaskItem *@
+@model BTLltWNC.Models.Work.TaskItem
+
+<a class="task-card" asp-controller="Work" asp-action="TaskDetail" asp-route-id="@Model.Code" asp-route-projectName="@(ViewData["BoardProjectName"] as string)">
+    <div class="task-card-top">
+        <span class="task-code">@Model.Code</span>
+        @if (!string.IsNullOrEmpty(Model.Avatar))
+        {
+            <span class="avatar sm @(Model.AvatarWarn ? "warn" : "")" style="@(Model.AvatarWarn ? "" : "background:#3a3a44;color:#cfcfd6;")">@Model.Avatar</span>
+        }
+        else
+        {
+            <span class="avatar sm" style="background:#3a3a44;color:#cfcfd6;">?</span>
+        }
+    </div>
+    <div class="task-title">@Model.Title</div>
+    @switch (Model.Priority)
+    {
+        case "low":
+            <span class="prio-tag" style="color:var(--accent);">↓ Thấp</span>
+            break;
+        case "medium":
+            <span class="prio-tag" style="color:#e6c34a;">⌃ Trung bình</span>
+            break;
+        case "high":
+            <span class="prio-tag">⌃ Cao</span>
+            break;
+        case "urgent":
+            <span class="prio-tag" style="color:var(--danger);">! Khẩn cấp</span>
+            break;
+        default:
+            <span class="prio-tag" style="color:var(--text-3);">– Không ưu tiên</span>
+            break;
+    }
+</a>

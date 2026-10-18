@@ -1,0 +1,63 @@
+@model TaskDetailViewModel
+@{
+    ViewData["Title"] = Model.Code;
+    ViewData["ActiveMenu"] = "work";
+    ViewData["Breadcrumb"] = Model.Code;
+}
+
+<a class="btn btn-outline btn-sm" asp-controller="Work" asp-action="Board" asp-route-projectName="@Model.ProjectName">← Quay lại Kanban</a>
+
+<div class="panel" style="margin-top:14px;padding:24px;">
+    <div class="detail-head">
+        <span class="pill">@Model.Status</span>
+        <span class="detail-code">@Model.ProjectName / @Model.Code</span>
+    </div>
+    <h1 style="font-size:22px;">@Model.Title</h1>
+
+    <div class="detail-meta">
+        <span class="chip"><span>⚑</span> @Model.Priority</span>
+        <span class="chip"><span>👤</span> @Model.Assignee</span>
+        <span class="chip"><span>📅</span> @Model.DueDate</span>
+        @foreach (var l in Model.Labels)
+        {
+            <span class="chip"><span class="chip-dot" style="background:var(--cyan);"></span> @l</span>
+        }
+    </div>
+
+    <div class="detail-section">
+        <h3>Mô tả</h3>
+        <p style="color:var(--text-2);margin:0;">@Model.Description</p>
+    </div>
+
+    <div class="detail-section">
+        <h3>Bình luận</h3>
+        @foreach (var c in Model.Comments)
+        {
+            <div style="display:flex;gap:10px;margin-bottom:14px;">
+                <span class="avatar">@c.Avatar</span>
+                <div>
+                    <div style="font-weight:600;font-size:13px;">@c.Author <span style="color:var(--text-3);font-weight:400;">@c.Time</span></div>
+                    <div style="color:var(--text-2);font-size:13.5px;">@c.Text</div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="detail-section">
+        <h3>Tệp đính kèm</h3>
+        @foreach (var a in Model.Attachments)
+        {
+            <div style="color:var(--text-2);font-size:13px;margin-bottom:4px;">📎 @a</div>
+        }
+    </div>
+
+    <div class="detail-section">
+        <h3>Người theo dõi</h3>
+        <div style="display:flex;gap:6px;">
+            @foreach (var f in Model.Followers)
+            {
+                <span class="pill">@f</span>
+            }
+        </div>
+    </div>
+</div>

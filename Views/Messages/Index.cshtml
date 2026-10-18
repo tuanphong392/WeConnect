@@ -1,0 +1,175 @@
+@model ChatViewModel
+@{
+    ViewData["Title"] = "Messages";
+    ViewData["ActiveMenu"] = "messages";
+    ViewData["Breadcrumb"] = "Messages";
+
+    // Chọn template tin nhắn theo hội thoại
+    string TplFor(string id) => id switch
+    {
+        "na" => "chat-tpl-na",
+        "wcn" => "chat-tpl-wcn",
+        "lp" => "chat-tpl-lp",
+        _ => "chat-tpl-default"
+    };
+}
+
+<div class="chat">
+    @* Cột trái: danh sách hội thoại *@
+    <div class="chat-list">
+        <div class="chat-list-head">
+            <div class="chat-search">
+                <span>🔍</span><input type="text" placeholder="Tìm cuộc trò chuyện..." /><span>⚙</span>
+            </div>
+        </div>
+        <div class="chat-tabs" data-tabs>
+            <span class="chat-tab active" data-tab="all">Tất cả</span>
+            <span class="chat-tab" data-tab="personal">Cá nhân</span>
+            <span class="chat-tab" data-tab="group">Nhóm</span>
+            <span class="chat-tab" data-tab="unread">Chưa đọc <span class="cnt">3</span></span>
+        </div>
+
+        <div class="chat-convs">
+            @foreach (var c in Model.Conversations)
+            {
+                var first = c == Model.Conversations.First();
+                <div class="conversation @(first ? "active" : "")"
+                     data-conv="@c.Id"
+                     data-name="@c.Name"
+                     data-avatar="@c.Avatar"
+                     data-email="@(c.Id == "na" ? "an.nguyen@weconnect.vn" : (c.Id == "lp" ? "linh.phuong@weconnect.vn" : "—"))"
+                     data-status="@(c.Online ? "Đang hoạt động" : (c.Group ? "Nhóm" : "Ngoại tuyến"))"
+                     data-tpl="@TplFor(c.Id)">
+                    <span class="avatar @(c.Online ? "green" : "")" style="@(c.Online ? "" : "background:#33333d;color:#ddd;")">
+                        @c.Avatar
+                        @if (c.Online) { <span class="online-dot"></span> }
+                    </span>
+                    <div class="c-body">
+                        <div class="c-top">
+                            <span class="c-name">@(c.Group ? "[Nhóm] " : "")@c.Name</span>
+                            <span class="c-time">@c.Time</span>
+                        </div>
+                        <div class="c-last">@c.LastMessage</div>
+                    </div>
+                    @if (c.Unread > 0) { <span class="c-unread">@c.Unread</span> }
+                </div>
+            }
+        </div>
+
+        <div class="chat-list-foot">
+            <span class="gdot"></span> 1 người đang trực tuyến <span style="margin-left:auto;">⚙</span>
+        </div>
+    </div>
+
+    @* Cột giữa: nội dung hội thoại *@
+    <div class="chat-main">
+        <div class="chat-header">
+            <span class="avatar" id="chat-avatar">NA</span>
+            <div>
+                <div class="h-name" id="chat-name">Nguyễn Văn An</div>
+                <div class="h-status" id="chat-status">Đang hoạt động</div>
+            </div>
+            <div class="spacer"></div>
+            <button class="icon-btn" type="button" title="Ghim">📌</button>
+            <button class="icon-btn" type="button" title="Tìm kiếm">🔍</button>
+        </div>
+
+        <div class="chat-notice">
+            <span>🔒</span> Hội thoại nội bộ được lưu trữ an toàn theo tiêu chuẩn ISO 27001 của WeConnect
+            <button class="btn btn-ghost btn-sm" type="button" style="margin-left:auto;">Chi tiết</button>
+        </div>
+
+        <div class="chat-messages" id="chat-messages">
+            @* Nội dung mặc định (hội thoại NA) — được thay bởi JS khi đổi hội thoại *@
+            <div class="message">
+                <span class="avatar" style="background:#33333d;color:#ddd;">NA</span>
+                <div>
+                    <div class="msg-meta">Nguyễn Văn An · 10:38</div>
+                    <div class="msg-bubble">Chào team admin, mình đã hoàn thành merge code cho module xác thực SSO của cụm dịch vụ Console.</div>
+                </div>
+            </div>
+            <div class="message mine">
+                <span class="avatar blue">T</span>
+                <div>
+                    <div class="msg-meta">Tôi · 10:41</div>
+                    <div class="msg-bubble">Đã nhận thông tin. Mình vừa chạy test tự động trên staging cluster EU-Central, kết quả 200 OK. Bạn gửi tài liệu đặc tả API v2 kèm theo luôn nhé.</div>
+                    <div class="msg-seen">Đã xem</div>
+                </div>
+            </div>
+            <div class="message">
+                <span class="avatar" style="background:#33333d;color:#ddd;">NA</span>
+                <div>
+                    <div class="msg-meta">Nguyễn Văn An · 10:42</div>
+                    <div class="msg-bubble">Đã cập nhật xong API đăng nhập. Đây là file tài liệu đặc tả hoàn chỉnh và task liên kết:</div>
+                    <div class="msg-file">
+                        <span class="f-ico">📄</span>
+                        <div>
+                            <div style="color:var(--text);">spec_weconnect_v2.pdf – 2.4 MB</div>
+                            <div class="f-meta">Tài liệu kỹ thuật</div>
+                        </div>
+                        <button class="btn btn-ghost btn-sm" type="button" style="margin-left:auto;">⬇</button>
+                    </div>
+                    <a class="msg-task" asp-controller="Work" asp-action="TaskDetail" asp-route-id="TCN-404" asp-route-projectName="WCN-console">
+                        <span>▣</span>
+                        <div>
+                            <div style="color:var(--text);">TCN-404</div>
+                            <div style="color:var(--text-2);">Refactor OAuth2 Flow &amp; Session...</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-input">
+            <button class="icon-btn" type="button" title="Đính kèm">📎</button>
+            <button class="icon-btn" type="button" title="Code">&lt;/&gt;</button>
+            <input class="input" id="chat-input" type="text" placeholder="Nhập tin nhắn cho Nguyễn Văn An..." />
+            <button class="icon-btn" type="button" title="Emoji">😊</button>
+            <button class="send" type="button" title="Gửi">➤</button>
+        </div>
+    </div>
+
+    @* Cột phải: thông tin hội thoại *@
+    <div class="chat-info">
+        <div class="ci-head">
+            <span class="avatar lg blue">NA</span>
+            <div class="ci-name" id="ci-name">Nguyễn Văn An</div>
+            <div class="ci-actions">
+                <button class="btn btn-outline btn-sm" type="button">Tắt thông báo</button>
+                <button class="btn btn-primary btn-sm" type="button">Kết bạn</button>
+            </div>
+        </div>
+        <div class="ci-section">
+            <div class="ci-label">Thông tin định danh</div>
+            <div class="ci-row" style="color:var(--text-2);">Email công ty</div>
+            <div class="ci-row" id="ci-email">an.nguyen@weconnect.vn</div>
+        </div>
+        <div class="ci-section">
+            <div class="ci-label">Tệp &amp; link đã chia sẻ</div>
+            <div class="ci-link" style="margin-bottom:8px;">Xem tất cả</div>
+            <div class="ci-file">📄 spec_v2.pdf <span style="color:var(--text-3);">2.4 MB • 10:42</span></div>
+            <div class="ci-file">🔗 figma.com/file/weconnect-ui... <span style="color:var(--text-3);">Liên kết Figma Design</span></div>
+        </div>
+    </div>
+</div>
+
+@* Template tin nhắn cho từng hội thoại (JS swap) *@
+<template id="chat-tpl-na">
+    <div class="message"><span class="avatar" style="background:#33333d;color:#ddd;">NA</span><div><div class="msg-meta">Nguyễn Văn An · 10:38</div><div class="msg-bubble">Chào team admin, mình đã hoàn thành merge code cho module xác thực SSO của cụm dịch vụ Console.</div></div></div>
+    <div class="message mine"><span class="avatar blue">T</span><div><div class="msg-meta">Tôi · 10:41</div><div class="msg-bubble">Đã nhận thông tin. Mình vừa chạy test tự động trên staging cluster EU-Central, kết quả 200 OK. Bạn gửi tài liệu đặc tả API v2 kèm theo luôn nhé.</div><div class="msg-seen">Đã xem</div></div></div>
+    <div class="message"><span class="avatar" style="background:#33333d;color:#ddd;">NA</span><div><div class="msg-meta">Nguyễn Văn An · 10:42</div><div class="msg-bubble">Đã cập nhật xong API đăng nhập. Đây là file tài liệu đặc tả hoàn chỉnh và task liên kết:</div><div class="msg-file"><span class="f-ico">📄</span><div><div style="color:var(--text);">spec_weconnect_v2.pdf – 2.4 MB</div><div class="f-meta">Tài liệu kỹ thuật</div></div><button class="btn btn-ghost btn-sm" type="button" style="margin-left:auto;">⬇</button></div><a class="msg-task" asp-controller="Work" asp-action="TaskDetail" asp-route-id="TCN-404" asp-route-projectName="WCN-console"><span>▣</span><div><div style="color:var(--text);">TCN-404</div><div style="color:var(--text-2);">Refactor OAuth2 Flow &amp; Session...</div></div></a></div></div>
+</template>
+
+<template id="chat-tpl-wcn">
+    <div class="message"><span class="avatar violet">WC</span><div><div class="msg-meta">WCN Console Core · 09:15</div><div class="msg-bubble">Cập nhật lịch họp sprint tuần này: thứ Sáu 14:00, phòng họp số 2.</div></div></div>
+    <div class="message mine"><span class="avatar blue">T</span><div><div class="msg-meta">Tôi · 09:20</div><div class="msg-bubble">Mình sẽ tham dự đầy đủ, cảm ơn team nhé.</div><div class="msg-seen">Đã xem</div></div></div>
+</template>
+
+<template id="chat-tpl-lp">
+    <div class="message"><span class="avatar pink">LP</span><div><div class="msg-meta">Linh Phương · Hôm qua</div><div class="msg-bubble">Em xem lại file thiết kế giúp chị nhé, có vài chỗ cần chỉnh màu.</div></div></div>
+    <div class="message mine"><span class="avatar blue">T</span><div><div class="msg-meta">Tôi · Hôm qua</div><div class="msg-bubble">Dạ vâng, em xem xong sẽ phản hồi trong hôm nay ạ.</div><div class="msg-seen">Đã xem</div></div></div>
+</template>
+
+<template id="chat-tpl-default">
+    <div class="message"><span class="avatar" style="background:#33333d;color:#ddd;">?</span><div><div class="msg-meta">Thành viên · gần đây</div><div class="msg-bubble">Chưa có tin nhắn mới trong hội thoại này.</div></div></div>
+</template>

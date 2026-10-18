@@ -1,0 +1,28 @@
+@* Dropdown thông báo mở từ chuông. Bấm mục -> chi tiết task (Vbw-25 làm mẫu). *@
+<div class="dropdown-menu notif-panel">
+    <div class="notif-head">
+        <span class="title">Thông báo</span>
+        <span class="mark" id="notif-mark-all">Đánh dấu đã đọc</span>
+    </div>
+    <div id="notif-list">
+        <a class="notif-item" asp-controller="Work" asp-action="TaskDetail" asp-route-id="Vbw-25" asp-route-projectName="WCN-console">
+            <div class="path">WCN-console / Vbw-25</div>
+            <div class="head"><span class="dot"></span>Trạng thái công việc thay đổi</div>
+            <div class="body">Task BC TODO từ In Progress sang In Review</div>
+            <div class="time">yesterday-Oct 9 2026 9:42 AM</div>
+        </a>
+        <a class="notif-item" asp-controller="Work" asp-action="TaskDetail" asp-route-id="Vbw-186" asp-route-projectName="WCN-console">
+            <div class="path">WCN-console / Vbw-186</div>
+            <div class="head"><span class="dot"></span>@@User... đã giao việc cho bạn</div>
+            <div class="body">Task BC TODO Lỗi lọc công việc theo người tạo và ngày tạo</div>
+            <div class="time">yesterday-Oct 9 2026 9:42 AM</div>
+        </a>
+        <a class="notif-item" asp-controller="Work" asp-action="TaskDetail" asp-route-id="Vbw-25" asp-route-projectName="WCN-console">
+            <div class="path">WCN-console / Vbw-25</div>
+            <div class="head"><span class="dot"></span>Trạng thái công việc thay đổi</div>
+            <div class="body">Task BC TODO từ In Progress sang In Review</div>
+            <div class="time">yesterday-Oct 9 2026 9:42 AM</div>
+        </a>
+    </div>
+    <span class="notif-clear" id="notif-clear-all">Clear all notifications</span>
+</div>

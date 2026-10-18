@@ -1,0 +1,137 @@
+@model AdminViewModel
+@{
+    ViewData["Title"] = "Quản trị & Phân quyền";
+    ViewData["ActiveMenu"] = "admin";
+    ViewData["Breadcrumb"] = "Quản trị & Phân quyền";
+}
+
+<div class="page-head">
+    <div>
+        <div class="page-title"><span class="cyan">RBAC SECURITY MATRIX</span></div>
+        <div class="page-sub">Quản trị &amp; Phân quyền <span class="pill">v2.8.4 Enterprise</span></div>
+    </div>
+    <div class="page-actions">
+        <div class="admin-search"><span>🔍</span><input type="text" placeholder="Tìm thành viên, vai trò, mã quyền..." /><span>/</span></div>
+        <button class="btn btn-outline" type="button">Nhật ký truy vết</button>
+        <button class="btn btn-primary" type="button">+ Thêm vai trò mới</button>
+    </div>
+</div>
+
+@* 4 thẻ thống kê *@
+<div class="stats-grid">
+    @foreach (var s in Model.Stats)
+    {
+        <div class="stat-card">
+            <div class="s-label">@s.Label</div>
+            <div class="s-value">@s.Value</div>
+            <div class="s-sub @(s.CyanSub ? "cyan" : "")">@s.Sub</div>
+            <div class="s-icon">@s.Icon</div>
+        </div>
+    }
+</div>
+
+@* Ma trận đặc quyền *@
+<div class="section-title">
+    <h2>Ma trận đặc quyền chức năng</h2>
+    <span class="pill">5 Mô-đun lõi</span>
+    <div class="legend">
+        <span><span class="ldot on"></span>Đã bật</span>
+        <span><span class="ldot off"></span>Không có quyền</span>
+    </div>
+</div>
+
+<table class="matrix-table">
+    <thead>
+        <tr>
+            <th>Chức năng / Mô-đun lõi</th>
+            <th>Quản trị viên (ADMIN)</th>
+            <th>Trưởng nhóm (LEADER)</th>
+            <th>Thành viên (MEMBER)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var r in Model.Matrix)
+        {
+            <tr>
+                <td class="module">@r.Module<span class="mod-desc">@r.Description</span></td>
+                <td><div class="cell-perm"><span class="toggle @(r.AdminOn ? "on" : "")" data-toggle-switch></span>@r.Admin</div></td>
+                <td><div class="cell-perm"><span class="toggle @(r.LeaderOn ? "on" : "")" data-toggle-switch></span>@r.Leader</div></td>
+                <td><div class="cell-perm"><span class="toggle @(r.MemberOn ? "on" : "")" data-toggle-switch></span>@r.Member</div></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@* Khung chính sách bảo mật *@
+<div class="policy-box">
+    <span class="ico">ⓘ</span>
+    <div>
+        <div class="p-title">Chính sách bảo mật mặc định (Default Isolation Policy)</div>
+        Tài khoản thành viên mới tạo mặc định chỉ được kích hoạt không gian và các kênh trao đổi công khai.
+        Thành viên sẽ không thể truy cập tài nguyên bảo mật, bảng dự án nhánh hay dữ liệu nhạy cảm cho đến khi
+        được Leader hoặc Admin gắn quyền vào nhóm làm việc tương ứng.
+    </div>
+</div>
+
+@* Danh sách nhân sự *@
+<div class="section-title">
+    <h2>Danh sách nhân sự &amp; Cấp bậc gán quyền</h2>
+    <span class="pill">Đang hiển thị 5 nhân sự chính</span>
+    <div class="legend">
+        <button class="btn btn-outline btn-sm" type="button">Lọc vai trò</button>
+        <button class="btn btn-outline btn-sm" type="button">Xuất CSV</button>
+    </div>
+</div>
+
+<table class="member-table">
+    <thead>
+        <tr>
+            <th>Thành viên</th>
+            <th>Email / Định danh</th>
+            <th>Vai trò hệ thống</th>
+            <th>Trạng thái</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var m in Model.Members)
+        {
+            <tr>
+                <td>
+                    <div class="member-cell">
+                        <span class="avatar @m.AvatarColor">@m.Avatar</span>
+                        <div>
+                            @m.Name
+                            <span class="m-role">@m.Position</span>
+                        </div>
+                    </div>
+                </td>
+                <td style="color:var(--text-2);">@m.Email</td>
+                <td><span class="pill @(m.RoleType == "admin" ? "violet" : "gray")">@m.Role</span></td>
+                <td>
+                    @if (m.Locked)
+                    {
+                        <span class="status-locked">Đã tạm khóa</span>
+                    }
+                    else
+                    {
+                        <span class="status-active">Đang hoạt động</span>
+                    }
+                </td>
+                <td>
+                    @if (m.Locked)
+                    {
+                        <button class="btn btn-outline btn-sm" type="button">Mở khóa</button>
+                        <button class="btn btn-ghost btn-sm" type="button" style="color:var(--danger);">✕</button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-outline btn-sm" type="button">Sửa quyền</button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="admin-footer">Cập nhật chính sách mới nhất: 14:02:19 (GMT+7) bởi Admin Core</div>

@@ -1,0 +1,36 @@
+@{
+    var breadcrumb = ViewData["Breadcrumb"] as string ?? ViewData["Title"] as string ?? "Trang";
+}
+
+<header class="topbar">
+    <button class="topbar-toggle" type="button" data-toggle-sidebar title="Thu/mở sidebar">☰</button>
+    <div class="breadcrumb">
+        <span>WECONNECT</span>
+        <span class="sep">/</span>
+        <span class="cur">@breadcrumb</span>
+    </div>
+
+    <div class="topbar-right">
+        @* Chuông thông báo + dropdown *@
+        <div class="dropdown">
+            <button class="icon-btn" type="button" title="Thông báo">🔔<span class="notif-dot" id="notif-dot"></span></button>
+            <partial name="_NotificationDropdown" />
+        </div>
+
+        @* Avatar người dùng + menu *@
+        <div class="dropdown">
+            <button class="icon-btn" type="button" title="Tài khoản">
+                <span class="avatar sm" style="background:#2f6fdb;">NA</span>
+            </button>
+            <div class="dropdown-menu" style="min-width:180px;">
+                <div style="padding:10px 14px;border-bottom:1px solid var(--border);">
+                    <div style="font-weight:600;">Nguyễn Tuấn Anh</div>
+                    <div style="color:var(--text-2);font-size:12px;">tuananh.nguyen@weconnect.vn</div>
+                </div>
+                <a class="dropdown-item" asp-controller="Account" asp-action="Profile"><span class="ico">👤</span>Hồ sơ cá nhân</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" asp-controller="Auth" asp-action="Login" style="color:var(--danger);"><span class="ico">⎋</span>Đăng xuất</a>
+            </div>
+        </div>
+    </div>
+</header>

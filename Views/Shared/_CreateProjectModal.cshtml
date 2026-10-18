@@ -1,0 +1,25 @@
+@* Modal tạo dự án mới (B10). Chỉ giao diện. *@
+<div class="modal-overlay" id="create-project-modal">
+    <div class="modal" style="max-width:460px;">
+        <div class="modal-header"><span>Create project</span></div>
+        <div class="modal-body">
+            <div class="field">
+                <label for="cp-name">Tên dự án</label>
+                <input class="input" id="cp-name" type="text" placeholder="Nhập tên dự án" />
+            </div>
+            <div class="field">
+                <label for="cp-desc">Mô tả</label>
+                <textarea class="input" id="cp-desc" rows="3" placeholder="Mô tả ngắn về dự án"></textarea>
+            </div>
+            <div class="field">
+                <label for="cp-due">Ngày hạn</label>
+                <input class="input" id="cp-due" type="text" placeholder="Chọn ngày hạn" />
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="left"></div>
+            <button class="btn btn-outline" type="button" data-close-modal>Hủy</button>
+            <button class="btn btn-primary" type="button" data-close-modal>Tạo</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,105 @@
+@* Modal tạo task mới (B6). Các dropdown bên trong chỉ cập nhật giao diện. *@
+<div class="modal-overlay" id="task-modal">
+    <div class="modal">
+        <div class="modal-header">
+            <span>Mã chung</span><span class="mute">›</span><span>Task mới</span>
+        </div>
+        <div class="modal-body">
+            <input class="task-title-input" type="text" placeholder="Tiêu đề công việc" />
+            <textarea class="task-desc-input" rows="2" placeholder="Thêm mô tả cho công việc"></textarea>
+
+            <div class="modal-chip-row">
+                <button class="chip" type="button" data-menu="menu-public"><span>🌐</span><span data-chip-label>Công khai</span></button>
+                <button class="chip accent" type="button" data-menu="menu-status"><span class="chip-dot"></span><span data-chip-label>To Do</span></button>
+                <button class="chip" type="button" data-menu="menu-priority"><span>–</span><span data-chip-label>Không ưu tiên</span></button>
+                <button class="chip" type="button" data-menu="menu-assignee"><span>👤</span><span data-chip-label>Phân công</span></button>
+                <button class="chip" type="button" data-menu="menu-due"><span>📅</span><span data-chip-label>Hạn chót</span></button>
+                <button class="chip" type="button" data-menu="menu-label"><span>🏷</span><span data-chip-label>Nhãn</span></button>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <label class="left" style="display:flex;align-items:center;gap:8px;color:var(--text-2);font-size:13px;cursor:pointer;">
+                <input type="checkbox" /> Thêm công việc khác
+            </label>
+            <button class="btn btn-outline" type="button" data-close-modal>Hủy</button>
+            <button class="btn btn-primary" type="button" data-close-modal>Tạo</button>
+        </div>
+    </div>
+
+    @* Dropdown Công khai / Riêng tư *@
+    <div class="menu" id="menu-public">
+        <div class="menu-item" data-pick="Công khai"><span class="ico">🌐</span>Công khai<span class="check">✓</span></div>
+        <div class="menu-item" data-pick="Riêng tư"><span class="ico" style="color:var(--warn);">🔒</span>Riêng tư<span class="check"></span></div>
+    </div>
+
+    @* Dropdown trạng thái *@
+    <div class="menu" id="menu-status">
+        <div class="menu-item" data-pick="To Do"><span class="ico">○</span>To Do<span class="check">✓</span></div>
+        <div class="menu-item" data-pick="In Progress"><span class="ico">◔</span>In Progress<span class="check"></span></div>
+        <div class="menu-item" data-pick="In Review"><span class="ico">🔍</span>In Review<span class="check"></span></div>
+        <div class="menu-item" data-pick="Done"><span class="ico">✓</span>Done<span class="check"></span></div>
+    </div>
+
+    @* Dropdown ưu tiên *@
+    <div class="menu" id="menu-priority">
+        <div class="menu-item" data-pick="Không ưu tiên"><span class="ico">–</span>Không ưu tiên<span class="check">✓</span></div>
+        <div class="menu-item" data-pick="Thấp"><span class="ico" style="color:var(--accent);">↓</span>Thấp<span class="check"></span></div>
+        <div class="menu-item" data-pick="Trung bình"><span class="ico" style="color:#e6c34a;">⌃</span>Trung bình<span class="check"></span></div>
+        <div class="menu-item" data-pick="Cao"><span class="ico" style="color:var(--warn);">⌃⌃</span>Cao<span class="check"></span></div>
+        <div class="menu-item" data-pick="Khẩn cấp"><span class="ico" style="color:var(--danger);">!</span>Khẩn cấp<span class="check"></span></div>
+    </div>
+
+    @* Dropdown phân công (mẫu) *@
+    <div class="menu" id="menu-assignee">
+        <div class="menu-item" data-pick="Nguyễn Văn An"><span class="avatar sm blue">NA</span>Nguyễn Văn An<span class="check"></span></div>
+        <div class="menu-item" data-pick="Đặng Tuấn Phong"><span class="avatar sm violet">ĐV</span>Đặng Tuấn Phong<span class="check"></span></div>
+        <div class="menu-item" data-pick="Linh Phương"><span class="avatar sm pink">LP</span>Linh Phương<span class="check"></span></div>
+    </div>
+
+    @* Dropdown hạn chót: lịch tháng 10/2026 *@
+    @{
+        var dow = new[] { "CN", "T2", "T3", "T4", "T5", "T6", "T7" };
+        int firstOffset = 4; // ngày 1/10/2026 là thứ Năm -> 4 ô trống phía trước
+        int daysInMonth = 31;
+        int today = 11;
+        int prevStart = 30 - firstOffset + 1; // các ngày cuối tháng 9
+    }
+    <div class="menu calendar" id="menu-due">
+        <div class="calendar-head">
+            <button type="button" data-calendar-prev>‹</button>
+            <span>Tháng 10, 2026</span>
+            <button type="button" data-calendar-next>›</button>
+        </div>
+        <div class="calendar-grid">
+            @foreach (var d in dow) { <div class="calendar-dow">@d</div> }
+            @for (int i = 0; i < firstOffset; i++) { <div class="calendar-day dim">@(prevStart + i)</div> }
+            @for (int d = 1; d <= daysInMonth; d++) { <div class="calendar-day @(d == today ? "today" : "")">@d</div> }
+            @{
+                int rem = (firstOffset + daysInMonth) % 7;
+                if (rem != 0)
+                {
+                    int nextDays = 7 - rem;
+                    for (int n = 1; n <= nextDays; n++) { <div class="calendar-day dim">@n</div> }
+                }
+            }
+        </div>
+    </div>
+
+    @* Dropdown nhãn *@
+    <div class="menu" id="menu-label" style="width:250px;">
+        <div class="menu-search"><span>🔍</span><input type="text" placeholder="Tìm kiếm nhãn..." /></div>
+        <div class="menu-scroll">
+            <div class="menu-item" data-pick="API BCCS"><span class="label-dot" style="background:#f2a33c;"></span>API BCCS<span class="check"></span></div>
+            <div class="menu-item" data-pick="API OA"><span class="label-dot" style="background:#34d399;"></span>API OA<span class="check"></span></div>
+            <div class="menu-item" data-pick="CMS"><span class="label-dot" style="background:#e5658a;"></span>CMS<span class="check"></span></div>
+            <div class="menu-item" data-pick="CRM"><span class="label-dot" style="background:#2aa79e;"></span>CRM (Tùy chọn...)<span class="check"></span></div>
+            <div class="menu-item" data-pick="Call"><span class="label-dot" style="background:#d97b2f;"></span>Call<span class="check"></span></div>
+            <div class="menu-item" data-pick="Chiến dịch SMS"><span class="label-dot" style="background:#e5484d;"></span>Chiến dịch SMS<span class="check"></span></div>
+            <div class="menu-item" data-pick="Chiến dịch gửi tin"><span class="label-dot" style="background:#34d399;"></span>Chiến dịch gửi tin...<span class="check"></span></div>
+            <div class="menu-item" data-pick="Chiến dịch đặc biệt"><span class="label-dot" style="background:#f472b6;"></span>Chiến dịch đặc biệt<span class="check"></span></div>
+            <div class="menu-item" data-pick="Công việc"><span class="label-dot" style="background:#34d399;"></span>Công việc<span class="check"></span></div>
+            <div class="menu-item" data-pick="Danh bạ chung"><span class="label-dot" style="background:#e5484d;"></span>Danh bạ chung...<span class="check"></span></div>
+            <div class="menu-item" data-pick="Danh sách chờ"><span class="label-dot" style="background:#7a7a85;"></span>Danh sách chờ...<span class="check"></span></div>
+        </div>
+    </div>
+</div>

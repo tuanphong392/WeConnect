@@ -1,0 +1,114 @@
+@model BTLltWNC.Models.Account.ProfileViewModel
+@{
+    ViewData["Title"] = "Hồ sơ cá nhân";
+    ViewData["ActiveMenu"] = "";
+    ViewData["Breadcrumb"] = "Hồ sơ cá nhân";
+}
+
+<div class="profile-wrap">
+    @* Cột trái: ảnh đại diện + thông tin tóm tắt *@
+    <aside class="panel profile-side">
+        <div class="profile-avatar-block">
+            <span class="avatar xl blue">@Model.AvatarText</span>
+        </div>
+        <div class="profile-avatar-actions">
+            <button class="btn btn-outline" type="button">Đổi ảnh</button>
+            <button class="btn btn-ghost profile-remove" type="button">Xóa ảnh</button>
+        </div>
+        <div class="profile-hint">JPG hoặc PNG, tối đa 2 MB.</div>
+
+        <div class="profile-divider"></div>
+
+        <div class="profile-name">@Model.FullName</div>
+        <div class="profile-job">@Model.JobTitle</div>
+        <div style="margin:6px 0 10px;"><span class="pill gray">@Model.RoleLabel</span></div>
+        <span class="status-active">@Model.Status</span>
+    </aside>
+
+    @* Cột phải: form 2 tab *@
+    <section class="panel profile-form">
+        @* Nhóm tab phân đoạn *@
+        <div data-tabs>
+            <div class="tabs">
+                <div class="tab active" data-tab="info">Thông tin cá nhân</div>
+                <div class="tab" data-tab="password">Đổi mật khẩu</div>
+            </div>
+        </div>
+
+        @* Tab 1: Thông tin cá nhân *@
+        <div data-tab-panel="info">
+            <form class="form-grid" onsubmit="return false;">
+                <div class="field">
+                    <label for="p-code">Mã nhân sự</label>
+                    <input class="input" id="p-code" value="@Model.EmployeeCode" readonly />
+                </div>
+                <div class="field">
+                    <label for="p-role">Vai trò</label>
+                    <input class="input" id="p-role" value="@Model.Role" readonly />
+                </div>
+                <div class="field">
+                    <label for="p-name">Họ và tên</label>
+                    <input class="input" id="p-name" value="@Model.FullName" />
+                </div>
+                <div class="field">
+                    <label for="p-email">Email</label>
+                    <div class="input-wrap">
+                        <input class="input" id="p-email" value="@Model.Email" readonly />
+                        <span class="input-lock">🔒</span>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="p-phone">Số điện thoại</label>
+                    <input class="input" id="p-phone" value="@Model.Phone" />
+                </div>
+                <div class="field">
+                    <label for="p-dept">Phòng ban</label>
+                    <input class="input" id="p-dept" value="@Model.Department" />
+                </div>
+                <div class="field">
+                    <label for="p-title">Chức danh</label>
+                    <input class="input" id="p-title" value="@Model.JobTitle" />
+                </div>
+                <div class="field full">
+                    <label for="p-bio">Giới thiệu ngắn</label>
+                    <textarea class="input" id="p-bio" rows="3">@Model.Bio</textarea>
+                </div>
+            </form>
+            <div class="profile-form-actions">
+                <a class="btn btn-outline" asp-controller="Work" asp-action="Index">Hủy</a>
+                <button class="btn btn-primary" type="button">Lưu thay đổi</button>
+            </div>
+        </div>
+
+        @* Tab 2: Đổi mật khẩu *@
+        <div data-tab-panel="password" style="display:none;">
+            <form class="form-grid" onsubmit="return false;">
+                <div class="field full">
+                    <label for="p-old">Mật khẩu hiện tại</label>
+                    <div class="input-wrap">
+                        <input class="input" id="p-old" type="password" placeholder="••••••••" />
+                        <button class="eye-btn" type="button" data-toggle-pass="p-old">👁</button>
+                    </div>
+                </div>
+                <div class="field full">
+                    <label for="p-new">Mật khẩu mới</label>
+                    <div class="input-wrap">
+                        <input class="input" id="p-new" type="password" placeholder="••••••••" />
+                        <button class="eye-btn" type="button" data-toggle-pass="p-new">👁</button>
+                    </div>
+                </div>
+                <div class="field full">
+                    <label for="p-confirm">Xác nhận mật khẩu mới</label>
+                    <div class="input-wrap">
+                        <input class="input" id="p-confirm" type="password" placeholder="••••••••" />
+                        <button class="eye-btn" type="button" data-toggle-pass="p-confirm">👁</button>
+                    </div>
+                </div>
+            </form>
+            <div class="profile-form-actions">
+                <a class="btn btn-outline" asp-controller="Work" asp-action="Index">Hủy</a>
+                <button class="btn btn-primary" type="button">Cập nhật mật khẩu</button>
+            </div>
+        </div>
+    </section>
+</div>
